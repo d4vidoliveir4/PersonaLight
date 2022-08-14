@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace PersonaLight.Controllers
 {
-    public class LoginController : Controller
+    public class HomeController : Controller
     {
-        private readonly ILogger<LoginController> _logger;
+        private readonly ILogger<HomeController> _logger;
 
-        public LoginController(ILogger<LoginController> logger)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
         }

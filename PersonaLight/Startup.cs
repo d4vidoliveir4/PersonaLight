@@ -26,8 +26,8 @@ namespace PersonaLight
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
-                        options.LoginPath = "/Login";
-                        options.AccessDeniedPath = "/Login";
+                        options.LoginPath = "/Home";
+                        options.AccessDeniedPath = "/Home";
                         options.ExpireTimeSpan = new TimeSpan(6,0,0);
                         options.SlidingExpiration = true;
                         options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
