@@ -1,0 +1,55 @@
+﻿@using System.Net
+@using PersonaLight.Constantes
+@using PersonaLight.HtmlHelperCustom
+@model CadastroBlog
+@{
+    ViewBag.Titulo = "Díario";
+    ViewBag.Title = "Díario";
+}
+<div id="todo">
+    @Html.MenuSistema((string)ViewBag.Titulo)
+    <div id="corpoPrincipal">
+        <div>
+            @using (Html.BeginForm("Editar", "CadastroBlog", FormMethod.Post, new { id = "listaPostagens" }))
+            {
+                <div class="formulario">    
+                    @Html.BotoesCrud()
+                    <div class="caixa">
+                        <div id="postagensBlog" class="blog">
+                            @foreach (var postagem in Model.ObterListaPaginaDiario())
+                            {
+                                <div class= '@(postagem.Publicado?"postagem-blog":"postagem-diario")'>
+                                    <a href="../CadastroBlog/Editar?id=@postagem.Id" style="color: #9900FF;"><h3 class="tituloPostagem" >@postagem.Titulo</h3></a>
+                                    <div class="corpoPostagem">
+                                        @Html.Raw(WebUtility.HtmlDecode(postagem.Conteudo))
+                                    </div>
+                                    <div class="rodapePostagem">Tags: @(postagem?.Tags??string.Empty) - Público:@(postagem.Publicado?"Sim":"Não") - @postagem.DataPublicacao.ToString("dd/MM/yyyy HH:mm")</div>                                    
+                                </div>
+                                <br />
+                             }
+                             @Html.HiddenFor(H=>H.Pagina)
+                             <div class="blocoBotoesBlog">
+                                    <a class="btnPadrao"  id="voltarPagina" title="Página anterior"><i class="fas fa-step-backward"></i></a>      
+                                    <a class="btnPadrao" id="proximaPagina" title="Próxima página"><i class="fas fa-step-forward"></i></a>             
+                             </div>         
+                        </div>
+                    </div>
+                    @Html.Hidden("Id")
+                </div> 
+            }
+        </div>        
+    </div>
+</div>
+@Html.Partial("_Acoes")
+@section Scripts {
+<script>
+         $("#proximaPagina").click(function() {
+             var proximapagina = parseInt($("#Pagina").val(), 10)+1;
+            location.replace('/CadastroBlog/Diario?pagina='+ proximapagina);
+         });
+         $("#voltarPagina").click(function() {
+             var proximapagina = $("#Pagina").val()-1;
+            location.replace('/CadastroBlog/Diario?pagina='+ proximapagina);
+         });
+</script>
+}

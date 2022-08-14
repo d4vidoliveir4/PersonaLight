@@ -1,0 +1,73 @@
+﻿@using PersonaLight.HtmlHelperCustom
+@using PersonaLight.Models
+@model CadastroDesejo
+@{
+    ViewBag.Titulo = "Desejos";
+    ViewBag.Title = "Desejos";
+}
+@Html.MenuSistema((string)ViewBag.Titulo)
+<div id="corpoPrincipal">
+    <div>
+        @using (Html.BeginForm("Editar", "CadastroDesejo", FormMethod.Post, new { id = "listaDesejos" }))
+        {
+            <div class="formulario">
+                @Html.BotoesCrud()
+                <div class="caixa">
+                    <div class="container">
+                        <div class="row">
+                            <div class="caixaGrid">                                                                      
+                                    <div class="panel panel-default panel-table">
+                                    <div class="panel-body">
+                                        <table id="tabelaDesejo" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th style="display:none;">Código</th>
+                                                    <th>Descrição</th>
+                                                    <th>Valor</th>
+                                                    <th>Ordem</th>
+                                                    <th>Realizado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var desejo in Model.ListarEntidades())
+                                                {
+                                                    <tr style=@(desejo.Realizado?"color:green;":"")>
+                                                        <td id="id" style="display:none;">@desejo.Id</td>
+                                                        <td>@desejo.Descricao</td>
+                                                        <td>@desejo.Valor.ToString("C")</td>
+                                                        <td>@desejo.Ordem</td>
+                                                        <td>@(desejo.Realizado?"Sim":"Não")</td>
+                                                    </tr>
+                                                }                
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("Id")                
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_Acoes")
+@section Scripts {
+    <script>
+        $('#tabelaDesejo tbody tr').dblclick(function () {
+           location.replace('@Url.Action("Editar", "CadastroDesejo")' + '?id=' + $("#Id").val());
+        });
+        $('#tabelaDesejo tbody tr').click(function () {
+            $(this).addClass('ativo').siblings().removeClass('ativo');
+            $("#Id").val($(this).children("td")[0].innerText)
+        });       
+       
+    </script>
+}
+
+
+

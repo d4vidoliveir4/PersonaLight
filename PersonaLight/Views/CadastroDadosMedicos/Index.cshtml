@@ -1,0 +1,72 @@
+﻿@using PersonaLight.HtmlHelperCustom
+@using PersonaLight.Models
+@model CadastroDadosMedicos
+@{
+    ViewBag.Titulo = "Saúde";
+    ViewBag.Title = "Saúde";
+    var lista = Model.ListarEntidades();
+}
+@Html.MenuSistema((string)ViewBag.Titulo)
+<div id="corpoPrincipal">
+    <div>
+        @using (Html.BeginForm("Editar", "CadastroDadosMedicos", FormMethod.Post, new { id = "listaCadastroDadosMedicos" }))
+        {
+            <div class="formulario">
+                @Html.BotoesCrud()
+                <div class="caixa">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="caixaGrid">
+                                                                      
+                                    <div class="panel panel-default panel-table">
+
+                                    <div class="panel-body">
+                                        <table id="tabelaCadastroDadosMedicos" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th style="display:none;">Código</th>
+                                                    <th>Data</th>
+                                                    <th>Pressão</th>
+                                                    <th>Glicose</th>
+                                                    <th>Temperatura</th>
+                                                    <th>Peso</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var financeiro in lista)
+                                                {
+                                                    <tr>
+                                                        <td id="id" style="display:none;">@financeiro.Id</td>
+                                                        <td>@financeiro.Data.ToShortDateString()</td>
+                                                        <td>@financeiro.Pressao</td>
+                                                        <td>@(financeiro.Glicose)</td>
+                                                        <td>@(financeiro.Temperatura.ToString("N2"))</td>
+                                                        <td>@(financeiro.Peso.ToString("N2"))</td>
+                                                    </tr>
+                                                }                      
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("Id")                
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_Acoes")
+@section Scripts {
+    <script>  
+        $('#tabelaCadastroDadosMedicos tbody tr').dblclick(function () {
+           location.replace('@Url.Action("Editar", "CadastroDadosMedicos")' + '?id=' + $("#Id").val());
+        });
+        $('#tabelaCadastroDadosMedicos tbody tr').click(function () {
+            $(this).addClass('ativo').siblings().removeClass('ativo');
+            $("#Id").val($(this).children("td")[0].innerText)
+        });       
+    </script>
+}

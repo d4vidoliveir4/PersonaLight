@@ -1,0 +1,21 @@
+﻿@using PersonaLight.Constantes
+@using PersonaLight.HtmlHelperCustom
+@{
+    ViewData["Title"] = "Home";
+} 
+@Html.Partial("_HeadSite")
+@Html.MenuSite()
+@Html.MastHead(true)      
+<section class="content-section" id="portfolio">
+    <div class="container px-4 px-lg-5">                
+        <div class="row gx-0">
+            @Html.ItemPortfolio(Urls.PaginaProjetos,"Softwares","Desenvolvimento de softwares, sites e aplicativos...","../assets/port1.jpg","Desenvolvimento de softwares, sites e aplicativos...")
+            @Html.ItemPortfolio(Urls.BlogFotografia,"Fotografia","Fotografia urbana e cenas naturais...","../assets/port2.jpg","Fotografia urbana e cenas naturais...")
+            @Html.ItemPortfolio(Urls.BlogCiclismo,"Ciclismo","Mais que um esporte um estilo de vida...","../assets/port3.jpg","Ciclismo, Mais que um esporte um estilo de vida...")
+            @Html.ItemPortfolio(Urls.Blog,"E mais","E mais por vir, talvez...","../assets/port4.jpg","Blog sobre a vida o universo e tudo mais...")   
+        </div>
+    </div>
+</section>
+@Html.FooterSite()
+@Html.Partial("_ScriptsSite")
+

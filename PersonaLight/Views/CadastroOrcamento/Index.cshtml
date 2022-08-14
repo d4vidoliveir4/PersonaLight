@@ -1,0 +1,83 @@
+﻿@using PersonaLight.HtmlHelperCustom
+@model CadastroOrcamento
+@{
+    ViewBag.Titulo = "Orçamento";
+    ViewBag.Title = "Orçamento";
+    var listaFinanceiro = Model.ListarFinanceiro();
+    var listaOrcamento = Model.ListarEntidades();
+}
+@Html.MenuSistema((string)ViewBag.Titulo)
+<div id="corpoPrincipal">
+    <div>
+        @using (Html.BeginForm("Editar", "CadastroOrcamento", FormMethod.Post, new { id = "listaOrcamento" }))
+        {
+            <div class="formulario"> 
+                @Html.BotoesCrud()
+                <div class="caixa">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="caixaGrid">
+
+                                <div class="panel panel-default panel-table">
+
+                                    <div class="panel-body">
+                                        <table id="tabelaOrcamento" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th style="display:none;">Código</th>
+                                                    <th>Descricao</th>
+                                                    <th>Valor</th>
+                                                    <th>Gasto</th>
+                                                    <th>Restante</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var orcamento in listaOrcamento)
+                                                {
+                                                    <tr>
+                                                        <td id="id" style="display:none;">@orcamento.Id</td>
+                                                        <td>@orcamento.Descricao</td>
+                                                        <td>@orcamento.Valor.ToString("C")</td>
+                                                        <td>@(listaFinanceiro.Where(w=>w.Orcamento.Id == orcamento.Id).Sum(s=>s.Valor).ToString("C"))</td>
+                                                        <td>@((orcamento.Valor - listaFinanceiro.Where(w=>w.Orcamento.Id == orcamento.Id).Sum(s=>s.Valor)).ToString("C"))</td>
+                                                    </tr>
+                                                }
+                                                <tr style="background-color:lightgray; border-top-style: solid;">
+                                                    <td id="id" style="display:none;"> @(DateTime.Now.ToShortDateString()) </td>
+                                                    <td>Orçamento Total</td>
+                                                    <td>@(listaOrcamento.Sum(s=>s.Valor).ToString("C"))</td>
+                                                    <td>@(listaFinanceiro.Sum(s=>s.Valor).ToString("C"))</td>                                                       
+                                                    <td>@((listaOrcamento.Sum(s=>s.Valor)-listaFinanceiro.Sum(s=>s.Valor)).ToString("C"))</td>                                                       
+                                                </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("Id")                
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_Acoes")
+@section Scripts {
+    <script>
+        $('#tabelaOrcamento tbody tr').dblclick(function () {
+           location.replace('@Url.Action("Editar", "CadastroOrcamento")' + '?id=' + $("#Id").val());
+        });
+        $('#tabelaOrcamento tbody tr').click(function () {
+            $(this).addClass('ativo').siblings().removeClass('ativo');
+            $("#Id").val($(this).children("td")[0].innerText)
+        });
+    </script>
+}
+
+
+

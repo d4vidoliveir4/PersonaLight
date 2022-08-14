@@ -1,0 +1,68 @@
+﻿@using PersonaLight.HtmlHelperCustom
+@model CadastroBlog
+@{
+    ViewBag.Titulo = "Blog";
+    ViewBag.Title = "Blog";
+}
+<div id="todo">
+    @Html.MenuSistema((string)ViewBag.Titulo)
+    <div id="corpoPrincipal">
+        <div>
+            @using (Html.BeginForm("Editar", "CadastroBlog", FormMethod.Post, new { id = "listaPostagens" }))
+            {
+                <div class="formulario">
+                    @Html.BotoesCrud()
+                    <div class="caixa">
+                        <div class="container">
+                            <div class="row">
+                                <div class="caixaGrid">
+                                    <div class="panel panel-default panel-table">
+                                        <div class="panel-body">
+                                            <table id="tabelaPostagem" class="table table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Código</th>
+                                                        <th>Título</th>
+                                                        <th>Data Publicação</th>
+                                                        <th>Público</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var postagem in new CadastroBlog().ListarEntidades().Where(w=>w.Publicado))
+                                                    {
+                                                        <tr>
+                                                            <td id="id">@postagem.Id</td>
+                                                            <td>@postagem.Titulo</td>
+                                                            <td>@postagem.DataPublicacao.ToShortDateString()</td>
+                                                            <td>@(postagem.Publicado?"Sim":"Não")</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @Html.Hidden("Id")
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@Html.Partial("_Acoes")
+@section Scripts {
+    <script>       
+        $('#tabelaPostagem tbody tr').dblclick(function () {
+           location.replace('@Url.Action("Editar")' + '?id=' + $("#Id").val());
+        });        
+        $('#tabelaPostagem tbody tr').click(function () {
+            $(this).addClass('ativo').siblings().removeClass('ativo');
+            $("#Id").val($(this).children("td")[0].innerText)
+        });
+    </script>
+}

@@ -1,0 +1,72 @@
+﻿@using PersonaLight.Constantes
+@using PersonaLight.HtmlHelperCustom
+@model CadastroBlog
+@{    
+    ViewBag.Titulo = "Postagem";
+    ViewBag.Title = "Postagem";
+}
+@Html.MenuSistema((string)ViewBag.Titulo)
+<div id="corpoPrincipal">    
+    <div class="caixa">
+        @using (Html.BeginForm("Salvar", "CadastroBlog", FormMethod.Post, new { id = "cadastroBlog" }))
+        {
+            <div class="formulario">                 
+                @Html.BotaoSalvar(Model.Entidade.Id != 0)
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })                
+                @Html.Partial("_MensagemErro",Model.Erro)
+                <div class="form-group">
+                    @Html.Label("Título")
+                    @Html.EditorFor(model => model.Entidade.Titulo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Entidade.Titulo, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">
+                    @Html.Label("Data Publicacão")
+                    @Html.EditorFor(m => m.Entidade.DataPublicacao, new { htmlAttributes = new { @class = "form-control", @type = "datetime-local" }})
+                </div>
+                <div style="display:inline-flex; width:100%;">
+                     <div class="form-group" style="width:86%; padding-right:1%">
+                        @Html.Label("Tags")
+                        @Html.EditorFor(model => model.Entidade.Tags, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                    <div class="form-group" style="width:15%;">
+                        @Html.Label("Publicado")
+                        @Html.EditorFor(model => model.Entidade.Publicado, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                   
+                </div>
+                <div class="form-group">                    
+                    @Html.Label("Body")
+                    @Html.TextAreaFor(m => m.Conteudo, new
+                    {
+                        rows = "20",
+                        style = "resize:none;width:100%;",
+                        placeholder = Html.DisplayNameFor(m => m.Conteudo),
+                        @class = "form-control input-lg textarea-editor"
+                    })
+                    @Html.Summernote()
+                </div>
+                @Html.Hidden("TituloAux")
+                @Html.HiddenFor(model => model.Entidade.Id)
+                @Html.HiddenFor(model => model.Entidade.DataPublicacao)               
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_AcaoDeletar")
+@section Scripts {
+    <script>
+        var intervalId = window.setInterval(function(){
+          $.ajax({
+                type: 'POST',
+                url: '@Url.Action("Ping","CadastroBlog")',
+                cache: false,
+                async: true,
+                success: (e) => {                    
+                },
+                error: (e) => {
+                },
+            });  
+        },30000);
+    </script>
+}

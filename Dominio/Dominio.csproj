@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="InterfaceRepositorios\IFinanceiroRepositorio.cs" />
+    <Compile Remove="InterfaceRepositorios\IOrcamentoRepositorio.cs" />
+    <Compile Remove="InterfaceRepositorios\IPostagemRepositorio.cs" />
+    <Compile Remove="InterfaceRepositorios\IReservaRepositorio.cs" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,47 @@
+﻿@using PersonaLight.HtmlHelperCustom
+@model CadastroUsuario
+@{
+    ViewBag.Titulo = "Usuário";
+    ViewBag.Title = "Usuário";
+}
+@Html.MenuSistema((string)ViewBag.Titulo)
+<div id="corpoPrincipal">       
+    <div class="caixa">
+        @using (Html.BeginForm("Salvar", "CadastroUsuario", FormMethod.Post, new { id = "cadastroUsuario" }))
+        {
+            <div class="formulario">
+                @Html.BotaoSalvar(Model.Entidade.Id != 0)
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.Partial("_MensagemErro",Model.Erro)
+                <div class="caixaFormulario">
+                    <div class="form-group">
+                        @Html.Label("Login")
+                        @Html.EditorFor(model => model.Entidade.Login, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Entidade.Login, "", new { @class = "text-danger" })
+                    </div>
+                    @if (Model.Entidade.Id != 0)
+                    {
+                        <div class="form-group">
+                            @Html.Label("Senha Atual")
+                            @Html.PasswordFor(model => model.SenhaAtual, new { @class = "form-control" , placeholder = "Password"  })
+                            @Html.ValidationMessageFor(model => model.SenhaAtual, "", new { @class = "text-danger" })
+                        </div>
+                    }
+                    <div class="form-group">
+                        @Html.Label("Senha Nova")
+                        @Html.PasswordFor(model => model.Entidade.Senha, new { @class = "form-control" , placeholder = "Password"  })
+                        @Html.ValidationMessageFor(model => model.Entidade.Senha, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group">
+                        @Html.Label("Repita a Senha Nova")
+                        @Html.PasswordFor(model => model.ConfirmacaoSenhaNova, new { @class = "form-control" , placeholder = "Password"  })
+                        @Html.ValidationMessageFor(model => model.Entidade.Senha, "", new { @class = "text-danger" })
+                    </div>
+                    @Html.HiddenFor(m => m.Entidade.Id)
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_AcaoDeletar")

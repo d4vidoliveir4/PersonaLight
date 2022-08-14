@@ -1,0 +1,12 @@
+
+D4vidOliveir4/cript
+D4vidOliveir4/ban
+*.dll
+*.pdb
+*.cache
+*.dll
+*.publishsettings
+*Debug*
+*Release*
+*.pubxml*
+D4vidOliveir4/wwwroot/ads.txt

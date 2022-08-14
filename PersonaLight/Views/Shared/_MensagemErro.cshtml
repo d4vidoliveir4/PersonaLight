@@ -1,0 +1,7 @@
+﻿@model string
+@if (!string.IsNullOrWhiteSpace(Model))
+{
+    <div style="border-width: thin; text-align: center; background-color: rgba(255, 0, 0, 0.32); color: #000; font-size:1.3rem; border-radius:5px;">
+        <p><b>ERRO:</b> @Model</p>
+    </div>
+}

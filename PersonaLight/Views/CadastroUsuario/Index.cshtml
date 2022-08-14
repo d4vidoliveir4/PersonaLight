@@ -1,0 +1,68 @@
+﻿@using PersonaLight.HtmlHelperCustom
+@model CadastroUsuario
+@{
+    ViewBag.Titulo = "Usuário";
+    ViewBag.Title = "Usuário";
+}
+@Html.MenuSistema((string)ViewBag.Titulo)
+<div id="corpoPrincipal">
+    <div>
+        @using (Html.BeginForm("Editar", "CadastroUsuario", FormMethod.Post, new { id = "listaUsuario" }))
+        {
+            <div class="formulario">
+                @Html.BotoesCrud()
+                <div class="caixa">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="caixaGrid">
+
+                                <div class="panel panel-default panel-table">
+
+                                    <div class="panel-body">
+                                        <table id="tabelaUsuario" class="table table-striped">
+                                            <thead>
+                                                <tr>
+                                                    <th>Código</th>
+                                                    <th>Login</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var usuario in Model.ListarEntidades())
+                                                {
+                                                    <tr>
+                                                        <td id="id">@usuario.Id</td>
+                                                        <td>@usuario.Login</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("Id")                
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_Acoes")
+@section Scripts {
+    <script>
+        $('#tabelaUsuario tbody tr').dblclick(function () {
+           location.replace('@Url.Action("Editar", "CadastroUsuario")' + '?id=' + $("#Id").val());
+        });
+        $('#tabelaUsuario tbody tr').click(function () {
+            $(this).addClass('ativo').siblings().removeClass('ativo');
+            $("#Id").val($(this).children("td")[0].innerText)
+        });
+    </script>
+}
+
+
+

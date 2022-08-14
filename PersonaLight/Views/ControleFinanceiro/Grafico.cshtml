@@ -1,0 +1,86 @@
+﻿@using PersonaLight.HtmlHelperCustom
+@using Dominio.Enumerados
+@model ControleFinanceiro
+@{
+    ViewBag.Titulo = "Gastos/Mês";
+    ViewBag.Title = "Gastos/Mês";
+}
+@Html.MenuSistema((string)ViewBag.Titulo)
+<div id="corpoPrincipal">
+    <div>
+        @using (Html.BeginForm("Editar", "ControleFinanceiro", FormMethod.Post, new { id = "listaFinanceiro" }))
+        {
+            <div class="formulario">             
+                @Html.BotoesCrud()
+                <div class="caixa">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="caixaGrid">
+                                    <div style="display:inline-flex; width:100%;">                                          
+                                        <div class="form-group" style="width:65%;padding-right:1%;">
+                                             @Html.DropDownList("SeletorOrcamento", new SelectList(Model.ListarOrcamentosFiltro(), "Id", "Name", Model.IdOrcamento), new { @class = "form-control text-box single-line" })
+                                        </div>               
+                                        <div class="form-group" style="width:35%;">
+                                             @Html.DropDownList("Ano", new SelectList(Model.ListaAno, "Id", "Name", (Model?.Ano??DateTime.Now.Year)), new { @class = "form-control text-box single-line" })
+                                        </div>     
+                                    </div>                       
+                                    <canvas id="myChart" width="100" height="40" style="background-color: white;border-radius: 5px;"></canvas>                                   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("Id")                
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_Acoes")
+<script src="/js/chart.min.js"></script>
+@section Scripts {
+    <script>
+         $("#Ano").change(function (){
+            location.replace('@Url.Action("Grafico", "ControleFinanceiro")' + '?ano=' + $("#Ano").val() + "&orcamento=" + $("#SeletorOrcamento").val());
+        });
+        $("#SeletorOrcamento").change(function (){
+            location.replace('@Url.Action("Grafico", "ControleFinanceiro")' + '?ano=' + $("#Ano").val() + "&orcamento=" + $("#SeletorOrcamento").val());
+        });
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'],
+                datasets: [{
+                    data: @Model.DadosGrafico,
+                    backgroundColor: [
+                        'rgba(255, 90, 90, 1)'
+                    ],
+                    borderColor: [                        
+                        'rgba(0, 0, 0, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                 plugins: {
+                    legend: {
+                        display: false,                        
+                    }
+                },
+                scales: {
+                     x: {
+                    grid: {
+                        display: false
+                    }
+                    },
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}
+
+
+
